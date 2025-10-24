@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE listofactions SYSTEM "customActions.dtd">
+<listofactions>
+
+    <objecttype name="object">
+
+        <action name="CustomAction">
+            <command 
+                class="ext.BomComparisionTool.BOMReportUnified" 
+                method="execute" 
+                url="/netmarkets/jsp/ext/BomComparisionTool/CustomAction.jsp" 
+                windowType="popup"/>
+            <label>BOM Comparison Result</label>
+        </action>
+
+    </objecttype>
+	
+	<objecttype name="object">
+
+        <action name="CustomActionT">
+		 <command 
+		        class="ext.Thumbnail.PartRepresentationHelper" 
+                method="execute" 
+                url="/netmarkets/jsp/ext/Thumbnail/Thumbnail.jsp"
+                windowType="popup"/>
+            <label>Thumbnail</label>
+        </action>
+
+    </objecttype>
+
+</listofactions>
