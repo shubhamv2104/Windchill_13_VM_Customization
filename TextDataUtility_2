@@ -1,0 +1,117 @@
+package ext.CustomDataUtility;
+
+import org.apache.commons.lang3.StringUtils;
+
+import com.ptc.core.components.descriptor.ModelContext;
+import com.ptc.core.components.factory.dataUtilities.InfoPageStateDataUtility;
+import com.ptc.core.components.lifecyclediagram.LifecycleDiagramConfig;
+import com.ptc.core.components.lifecyclediagram.LifecycleDiagramUtil;
+import com.ptc.core.components.rendering.guicomponents.TextDisplayComponent;
+import com.ptc.core.components.rendering.guicomponents.UrlDisplayComponent;
+import com.ptc.core.lwc.server.PersistableAdapter;
+import com.ptc.core.meta.common.UpdateOperationIdentifier;
+
+import wt.part.WTPart;
+import wt.session.SessionHelper;
+import wt.util.WTException;
+
+public class TextDataUtility extends InfoPageStateDataUtility {
+
+    @Override
+    public Object getDataValue(String var1, Object var2, ModelContext var3) throws WTException {
+        System.out.println("111111111111##########");
+
+        String lifecycleState = this.getLifecycleStateFromParameters(var2, var3);
+        LifecycleDiagramConfig lcConfig = LifecycleDiagramUtil.getLifecycleDiagramConfig(var2);
+        System.out.println("22222222##########");
+
+        if (!StringUtils.isEmpty(lifecycleState)) {
+            String tooltip = LifecycleDiagramUtil.getTooltip(lifecycleState);
+            String displayValue = lifecycleState;
+            String plannerAtrValue = "";
+
+            if (var2 instanceof WTPart) {
+                WTPart part = (WTPart) var2;
+
+                // revision
+                String revision = part.getVersionIdentifier().getSeries().getValue();
+
+                // iteration
+                String iterationStr = part.getIterationIdentifier().getValue();
+                int iteration = Integer.parseInt(iterationStr);
+
+                // Planner attribute retrieval
+                try {
+                    PersistableAdapter obj = new PersistableAdapter(
+                            part,
+                            null,
+                            SessionHelper.getLocale(),
+                            new UpdateOperationIdentifier()
+                    );
+
+                    obj.load("Planner");                // load IBA definition
+                    plannerAtrValue = (String) obj.get("Planner");  // get IBA value
+                    obj.apply();
+
+                    System.out.println("@@@@@ plannerAtrValue:-" + plannerAtrValue);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                System.out.println(
+                        "Revision: " + revision +
+                        "  Iteration: " + iteration +
+                        "  State: " + lifecycleState +
+                        "  Planner: " + plannerAtrValue
+                );
+
+                // -------------------------------
+                // RULE 1 — If Planner has any value → ONLY beta
+                // -------------------------------
+                if (StringUtils.isNotBlank(plannerAtrValue)) {
+                    displayValue = lifecycleState + "<br/>Beta";
+                }
+
+                // -------------------------------
+                // RULE 2 — Released A.1 → Alpha 0
+                // -------------------------------
+                else if ("RELEASED".equalsIgnoreCase(lifecycleState)
+                        && "A".equalsIgnoreCase(revision)
+                        && iteration == 1) {
+                    displayValue = lifecycleState + "<br/>Alpha 0";
+                }
+
+                // -------------------------------
+                // RULE 3 — All others → Alpha 1
+                // -------------------------------
+                else {
+                    displayValue = lifecycleState + "<br/>Alpha 1";
+                }
+            }
+
+            // create display component
+            if (lcConfig == null) {
+                TextDisplayComponent tdc = new TextDisplayComponent(var1, displayValue);
+                tdc.setTooltip(tooltip);
+                tdc.setCheckXSS(false);
+                System.out.println("3333333##########");
+                return tdc;
+
+            } else {
+                UrlDisplayComponent udc = new UrlDisplayComponent(
+                        var1,
+                        displayValue,
+                        LifecycleDiagramUtil.getURLForLifeCycleDiagramConfig(lcConfig)
+                );
+                udc.setToolTip(tooltip);
+                udc.setNonPureHTMLLink(true);
+                udc.setCheckXSS(false);
+                System.out.println("4444443##########");
+                return udc;
+            }
+        }
+
+        return TextDisplayComponent.NBSP;
+    }
+}
