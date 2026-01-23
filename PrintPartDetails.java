@@ -98,7 +98,7 @@ public class PrintPartDetails implements RemoteAccess {
 
         if (!describedDocs.hasMoreElements()) {
             output.append("No described-by documents found.\n");
-        }
+        }	
 
         while (describedDocs.hasMoreElements()) {
             WTDocument doc = (WTDocument) describedDocs.nextElement();
@@ -116,8 +116,8 @@ public class PrintPartDetails implements RemoteAccess {
 
         output.append("\n");
 
-        // 5️⃣ REFERENCE DOCUMENTS
-        output.append("Reference Documents (Masters)\n")
+     // ---------- REFERENCE DOCUMENTS ----------
+        output.append("Reference Documents\n")
               .append("----------------------------\n");
 
         QueryResult refDocs =
@@ -128,11 +128,36 @@ public class PrintPartDetails implements RemoteAccess {
         }
 
         while (refDocs.hasMoreElements()) {
+
             WTDocumentMaster docMaster =
                     (WTDocumentMaster) refDocs.nextElement();
 
+            // 1️⃣ Get any document iteration from master
+            QueryResult docQR =
+                    VersionControlHelper.service.allIterationsOf(docMaster);
+
+            if (!docQR.hasMoreElements()) {
+                continue;
+            }
+
+            WTDocument doc = null;
+            while (docQR.hasMoreElements()) {
+                doc = (WTDocument) docQR.nextElement();
+            }
+
+            // 2️⃣ Ensure latest iteration (same logic as part)
+            doc = (WTDocument) VersionControlHelper.service
+                    .getLatestIteration(doc, true);
+
+            // 3️⃣ Print details
             output.append("Doc Number : ")
-                  .append(docMaster.getNumber())
+                  .append(doc.getNumber())
+                  .append(", Name : ")
+                  .append(doc.getName())
+                  .append(", Version : ")
+                  .append(doc.getVersionIdentifier().getValue())
+                  .append(".")
+                  .append(doc.getIterationIdentifier().getValue())
                   .append("\n");
         }
 
