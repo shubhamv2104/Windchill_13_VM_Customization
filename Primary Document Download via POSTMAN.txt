@@ -1,0 +1,28 @@
+
+PTC Document Management Domain
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+GET/ Document
+$filter		Number eq '0000170058'
+
+Request URL
+http://windchill-dev.srvlearning.net:80/Windchill/servlet/odata/v6/DocMgmt/Documents?%24filter=Number%20eq%20'0000170058'&%24count=false
+
+Response body
+ID": "OR:wt.doc.WTDocument:32198828
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+GET/ Documents('{DocumentId}')/Primary Content
+DocumentId 		OR:wt.doc.WTDocument:32198828
+
+Request URL
+http://windchill-dev.srvlearning.net:80/Windchill/servlet/odata/v6/DocMgmt/Documents('OR%3Awt.doc.WTDocument%3A32198828')/PrimaryContent
+
+Response body:
+"Content": {
+    "URL": "http://windchill-dev.srvlearning.net/Windchill/servlet/WindchillAuthGW/wt.fv.master.RedirectDownload/redirectDownload/40161515SD00402_F040DMD0008E10BBB4HS000S0_568.pdf?u8&redirect=true&ContentHolder=wt.doc.WTDocument%3A32198828&HttpOperationItem=wt.content.ApplicationData%3A32198833&forceDownload=true",
+    "Label": "40161515SD00402_F040DMD0008E10BBB4HS000S0_568.pdf"
+	
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
