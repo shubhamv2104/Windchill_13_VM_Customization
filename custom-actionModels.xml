@@ -107,6 +107,11 @@
        <action name="new_plan_activity" type="planActivity" /><!-- New Plan Activity against subject -->
        <includeFilter name="hideAdhocVersionFilter" />
    </model>
+   
+<model name="myNavigatorTab"   resourceBundle="ext.RBEntry.navigationARB">
+		<action name="ChatWithAi" type="myType" />
+</model>
+
 
 
 

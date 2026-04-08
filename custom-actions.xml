@@ -27,5 +27,43 @@
         </action>
 
     </objecttype>
+	
+	<objecttype name="object">
+
+        <action name="comparison">
+		 <command 
+		        class="ext.Customization.GetPartDetailsWithThumbnail" 
+                method="execute" 
+                url="/netmarkets/jsp/ext/PartDetailsWithThumbnail/partThumbnailWithDetails.jsp"
+                windowType="popup"/>
+            <label>4 Parts Comparison</label>
+        </action>
+
+    </objecttype>
+	
+	<objecttype name="object">
+
+        <action name="PrimaryContentDownloads">
+		 <command 
+		        class="ext.Customization.DownloadPrimaryContentRest" 
+                method="execute" 
+                url="/netmarkets/jsp/ext/DownloadPrimaryContent/DownloadPrimaryContent.jsp"
+                windowType="popup"/>
+            <label>Primary Content Downloads</label>
+        </action>
+
+    </objecttype>
+	
+<objecttype name="myType" class="com.ptc.myTabClass" resourceBundle="ext.RBEntry.navigationARB">
+
+    <action name="ChatWithAi">
+		
+        <command url="/netmarkets/jsp/ext/AI/AIChat.jsp"
+			windowType="page"/>
+		
+        <label>ChatWithAi</label> 
+    </action>
+
+</objecttype>
 
 </listofactions>
