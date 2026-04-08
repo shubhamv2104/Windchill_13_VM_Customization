@@ -1,0 +1,1 @@
+ant -f bin/tools.xml class -Dclass.includes=ext/BomComparisionTool/BOMComparator.java -Dclass.listfiles=yes
